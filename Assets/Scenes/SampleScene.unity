@@ -461,7 +461,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158363633}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.8400002, y: 0.19, z: 0.056817114}
+  m_LocalPosition: {x: -3.81, y: 0.16, z: 0.056817114}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -722,7 +722,7 @@ MonoBehaviour:
   interactPosition: {x: 0.55, y: -0.55, z: 0}
   interactRotation: {x: 0, y: 0, z: 45}
   interactRadius: 1.2
-  interactDelay: 0.2
+  interactDelay: 0.5
   isInteracting: 0
   Leave: 0
   PlayerController: {fileID: 0}
@@ -792,7 +792,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Ship: {fileID: 158363633}
+  startDelay: 0.2
   fishDelay: 1
+  fishingTimeMin: 1
+  fishingTimeMax: 5
+  FishPrefab: {fileID: 2161169838982118038, guid: d68c2c60bb8fbac4397ab223b25f9a58, type: 3}
+  Player: {fileID: 1997572559}
 --- !u!50 &350707103
 Rigidbody2D:
   serializedVersion: 4
@@ -1087,7 +1092,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -0.72, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1190,7 +1195,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0.26033115, b: 1, a: 1}
+  m_Color: {r: 0.3018868, g: 0.22342803, b: 0.16632253, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1281,7 +1286,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Ship: {fileID: 158363633}
   rotationSpeed: 20
-  maxRotationAngle: 20
 --- !u!1 &1373151963
 GameObject:
   m_ObjectHideFlags: 0
@@ -1292,6 +1296,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1373151964}
   - component: {fileID: 1373151965}
+  - component: {fileID: 1373151967}
+  - component: {fileID: 1373151966}
   m_Layer: 0
   m_Name: FishingRod_1
   m_TagString: Untagged
@@ -1366,6 +1372,45 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1373151966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373151963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ccfc25d1c649847a3d5aeb29ecee9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ship: {fileID: 158363633}
+  startDelay: 0.2
+  fishDelay: 1
+  fishingTimeMin: 15
+  fishingTimeMax: 30
+  FishPrefab: {fileID: 2161169838982118038, guid: d68c2c60bb8fbac4397ab223b25f9a58, type: 3}
+  Player: {fileID: 1997572559}
+--- !u!114 &1373151967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373151963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63044e437b083704e95ce8797d2134a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactPosition: {x: 0.55, y: 0.55, z: 0}
+  interactRotation: {x: 0, y: 0, z: 135}
+  interactRadius: 1.2
+  interactDelay: 0.5
+  isInteracting: 0
+  Leave: 0
+  PlayerController: {fileID: 0}
+  player: {fileID: 1997572559}
 --- !u!1 &1494699811
 GameObject:
   m_ObjectHideFlags: 0
@@ -2097,7 +2142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a26f3f0419c1add44a3589ae648a20a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnDelay: 3
+  spawnDelayMin: 3
+  spawnDelayMax: 6
   CannonballPrefab: {fileID: 1430340358046697689, guid: db3a0d3a7b3ef7544a2ba88d0c9834c2, type: 3}
   Ship: {fileID: 158363633}
   Player: {fileID: 1997572559}

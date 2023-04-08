@@ -51,8 +51,9 @@ public class HoldBehaviour : MonoBehaviour
         }
         else
         {
-            if(holdableName == "fish")
-                Debug.Log("Isgoing");
+            if(holdableName == "fish" && PlayerController.wantToInteract)
+            {
+            }
             if (PlayerController.wantToDrop && canToggle)
                 DropHoldable(false);
         }
