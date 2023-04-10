@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4810825914482832057}
   - component: {fileID: 3192957160213457266}
   - component: {fileID: 3192957160213457262}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CannonballHold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,6 +150,7 @@ MonoBehaviour:
   holdableName: cannonball
   holdRadius: 1
   toggleDelay: 0.2
+  eatDelay: 0
   friction: 0.4
   holdPosition: {x: 0, y: 0.4, z: 0}
   holdRotation: {x: 0, y: 0, z: 0}

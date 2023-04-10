@@ -12,11 +12,11 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - 'Ship '
+  - Player
+  - Interactable
+  - Pickupable
+  - Ship Collidable
   - 
   - 
   - 
@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Top
+    uniqueID: 919430033
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

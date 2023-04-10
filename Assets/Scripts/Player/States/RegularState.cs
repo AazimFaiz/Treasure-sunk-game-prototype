@@ -29,12 +29,12 @@ public class RegularState : PlayerBaseState
         float verticalInput = Input.GetAxisRaw("Vertical");
         float spaceInput = Input.GetAxisRaw("Interact");
 
-        ShipController shipControl = sc.ship.GetComponent<ShipController>();
+       /* ShipController shipControl = sc.ship.GetComponent<ShipController>();
 
         Vector2 direction = new Vector2(horizontalInput, verticalInput).normalized ;
-        direction = sc.ship.transform.TransformDirection(direction);
+        direction = sc.ship.transform.TransformDirection(direction);*/
         //rb.MovePosition((Vector2)sc.transform.position + sc.moveSpeed * Time.deltaTime * direction);
-        rb.velocity = sc.moveSpeed  * direction;
+        //rb.velocity = sc.ship.GetComponent<ShipController>().rb.velocity + sc.moveSpeed  * direction;
 
         Vector2 mousePos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
         sc.transform.up = (Vector3)(mousePos - new Vector2(sc.transform.position.x, sc.transform.position.y));
@@ -43,24 +43,6 @@ public class RegularState : PlayerBaseState
             sc.wantToInteract = true;
         else
             sc.wantToInteract = false;
-
-        /*for(int i = 0;i < sc.interactableList.Count; ++i)
-        {
-            GameObject interactableObj = sc.interactableList[i];
-            Interactable interactable = interactableObj.GetComponent<Interactable>();
-
-            float distance = Vector3.Distance(sc.transform.position, interactableObj.transform.position);
-            if (distance < interactable.interactRadius)
-            {
-                // Debug.Log("Player is close to steering!: " + sc.transform.localPosition);
-                if (spaceInput == 1)
-                {
-                    sc.isInteracting = true;
-                    sc.ChangeState(sc.interactableStates[i + 1]);
-                    break;
-                }
-            }
-        }*/
     }
 
     public override void OnExit()

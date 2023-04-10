@@ -7,33 +7,51 @@ using System;
 
 public class PlayerStateController : MonoBehaviour
 {
-    PlayerBaseState currentState;
-
     public float moveSpeed = 5f;
+    public float hungerIncrDelay;
+    public int maxHunger = 10;
+    public int hungerIncr = 1;
+    public int eatGain = 5;
 
+    Coroutine hungerCoroutine;
+    int hunger = 10;
+
+    [HideInInspector]
     public bool isHolding = false;
+    [HideInInspector]
     public bool isInteracting = false;
+    [HideInInspector]
     public bool wantToInteract = false;
+    [HideInInspector]
     public bool wantToLeave = false;
+    [HideInInspector]
     public bool wantToHoldToggle = false;
+    [HideInInspector]
     public bool wantToHold = false;
+    [HideInInspector]
     public bool wantToDrop = false;
+    public bool hasWon = true;
 
+    [HideInInspector]
     public float horizontalInput;
+    [HideInInspector]
     public float verticalInput;
     float spaceInput;
     float shiftInput;
     float leftMouseInput;
     float rightMouseInput;
 
-    public GameObject ship;
+    public GameObject Ship;
+    public GameObject HungerBar;
 
-    private Rigidbody2D rb; 
+    Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        hungerCoroutine = StartCoroutine(IncreaseHunger());
     }
 
     // Update is called once per frame
@@ -51,18 +69,42 @@ public class PlayerStateController : MonoBehaviour
         wantToHoldToggle = leftMouseInput != 0;
         wantToHold = leftMouseInput != 0;
         wantToDrop = rightMouseInput != 0;
+    }
 
+    void LateUpdate()
+    {
         if (!isInteracting)
         {
-            ShipController shipControl = ship.GetComponent<ShipController>();
-
             Vector2 direction = new Vector2(horizontalInput, verticalInput).normalized;
-            direction = ship.transform.TransformDirection(direction);
-            rb.velocity = moveSpeed * direction;
+            direction = Ship.transform.TransformDirection(direction);
+            rb.velocity = Ship.GetComponent<ShipController>().rb.velocity + moveSpeed * direction;
 
             Vector2 mousePos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
             transform.up = (Vector3)(mousePos - new Vector2(transform.position.x, transform.position.y));
         }
+    }
+
+    public void EatFish()
+    {
+        hunger += eatGain;
+        if(hunger > maxHunger)
+            hunger = maxHunger;
+        HungerBar.GetComponent<SliderBar>().setHealth(hunger);
+
+        StopCoroutine(hungerCoroutine);
+        StartCoroutine(IncreaseHunger());
+    }
+
+    IEnumerator IncreaseHunger()
+    {
+        yield return new WaitForSeconds(hungerIncrDelay);
+        hunger -= hungerIncr;
+
+        if(hunger > - 1)
+            HungerBar.GetComponent<SliderBar>().setHealth(hunger);
+
+        if (hunger > 0)
+            hungerCoroutine = StartCoroutine(IncreaseHunger());
     }
 }
 

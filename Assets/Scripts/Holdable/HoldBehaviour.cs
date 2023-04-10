@@ -6,12 +6,14 @@ using UnityEngine.Rendering;
 
 public class HoldBehaviour : MonoBehaviour
 {
-    public bool isHeld = false;
+    bool canEat = false;
     bool canToggle = true;
 
+    public bool isHeld = false;
     public string holdableName;
     public float holdRadius;
     public float toggleDelay;
+    public float eatDelay;
     public float friction;
     public Vector3 holdPosition;
     public Vector3 holdRotation;
@@ -51,8 +53,12 @@ public class HoldBehaviour : MonoBehaviour
         }
         else
         {
-            if(holdableName == "fish" && PlayerController.wantToInteract)
+            if(holdableName == "fish" && PlayerController.wantToInteract && canEat)
             {
+                DropHoldable(false);
+                Destroy(transform.gameObject);
+
+                PlayerController.EatFish();
             }
             if (PlayerController.wantToDrop && canToggle)
                 DropHoldable(false);
@@ -74,6 +80,7 @@ public class HoldBehaviour : MonoBehaviour
         transform.rotation = PlayerController.transform.rotation;
 
         StartCoroutine(ToggleHold(toggleDelay));
+        StartCoroutine(EatDelay(eatDelay));
     }
 
     public void DropHoldable(bool deleteHoldable)
@@ -115,5 +122,12 @@ public class HoldBehaviour : MonoBehaviour
         canToggle = false;
         yield return new WaitForSeconds(sec);
         canToggle = true;
+    }
+
+    private IEnumerator EatDelay(float sec)
+    {
+        canEat = false;
+        yield return new WaitForSeconds(sec);
+        canEat = true;
     }
 }

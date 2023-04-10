@@ -3,18 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SteeringInteraction : InteractionInterface
 {
     bool canInteract = true;
 
     public float rotationSpeed = 20f; // The speed at which the object should rotate
+    public float leftPoint;
+    public Vector3 rotatePivot;
+    public bool spawnPivot = false;
+
+    public GameObject pivotPrefab;
+    GameObject rock;
 
     private InteractionBehaviour Interaction;
 
     void Start()
     {
         Interaction = GetComponent<InteractionBehaviour>();
+        if (spawnPivot)
+        {
+            rock = Instantiate(pivotPrefab, (base.Ship.transform.position - base.Ship.transform.right * leftPoint), 
+                pivotPrefab.transform.rotation, base.Ship.transform);
+        }
     }
 
     override public void OnEnter()
@@ -43,6 +55,8 @@ public class SteeringInteraction : InteractionInterface
 
     override public void OnUpdate()
     {
+        if(spawnPivot)
+            rock.transform.position = base.Ship.transform.position - base.Ship.transform.right * leftPoint;
         if (canInteract)
         {
             // Change player's position to be next to the interactable
@@ -50,8 +64,15 @@ public class SteeringInteraction : InteractionInterface
                 + Interaction.interactPosition;
 
             // Change ship's rotation using horizontal input
-            base.Ship.transform.Rotate(Vector3.forward * Time.deltaTime * rotationSpeed *
-                -Interaction.PlayerController.horizontalInput);
+            //base.Ship.transform.Rotate(Vector3.forward * Time.deltaTime * rotationSpeed *
+            //    -Interaction.PlayerController.horizontalInput);
+
+            float rotationAngle = Time.deltaTime * rotationSpeed * 
+                -Interaction.PlayerController.horizontalInput;
+
+            Vector3 rotateAroundPoint = base.Ship.transform.position - base.Ship.transform.right * leftPoint;
+            base.Ship.transform.RotateAround(rotateAroundPoint, Vector3.forward, rotationAngle);
+                
         }
     }
 

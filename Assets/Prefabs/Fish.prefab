@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8038234515067923744}
   - component: {fileID: 1239052262604446703}
   - component: {fileID: 7320407280228389378}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Fish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,6 +150,7 @@ MonoBehaviour:
   holdableName: fish
   holdRadius: 1
   toggleDelay: 0.2
+  eatDelay: 0.2
   friction: 0.4
   holdPosition: {x: 0, y: 0.2, z: 0}
   holdRotation: {x: 0, y: 0, z: 0}

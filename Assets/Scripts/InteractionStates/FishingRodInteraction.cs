@@ -14,6 +14,7 @@ public class FishingRodInteraction : InteractionInterface
     public float fishDelay;
     public float fishingTimeMin;
     public float fishingTimeMax;
+    public float treasureChance;
 
     InteractionBehaviour Interaction;
     SpriteRenderer SpriteRenderer;
@@ -39,10 +40,12 @@ public class FishingRodInteraction : InteractionInterface
 
         if (Interaction.PlayerController.isHolding)
         {
+            
             Transform holdable = Interaction.PlayerController.transform.GetChild(0);
             HoldBehaviour holdBehaviour = holdable.GetComponent<HoldBehaviour>();
 
-            if(holdBehaviour.holdableName == "fish"){
+            if (holdBehaviour.holdableName == "fish")
+            {
                 Interaction.Leave = true;
                 StartCoroutine(InteractDelay(0.2f));
             }
@@ -80,7 +83,10 @@ public class FishingRodInteraction : InteractionInterface
                 if (isFishing)
                 {
                     SpriteRenderer.color = new Color(1f, 0.7737637f, 0f, 1f);
-                    Fishing = StartCoroutine(GetFishAfterDelay(Random.Range(fishingTimeMin, fishingTimeMax)));
+                    if(Random.Range(0.0f, 1.0f) < treasureChance)
+                        Fishing = StartCoroutine(GetTreasureAfterDelay(Random.Range(fishingTimeMin, fishingTimeMax)));
+                    else
+                        Fishing = StartCoroutine(GetFishAfterDelay(Random.Range(fishingTimeMin, fishingTimeMax)));
                 }
                 else
                 {
@@ -144,5 +150,13 @@ public class FishingRodInteraction : InteractionInterface
         Fishing = null;
         hasFish = true;
         SpriteRenderer.color = new Color(0.7773361f, 0f, 1f, 1f);
+    }
+
+    IEnumerator GetTreasureAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Fishing = null;
+        SpriteRenderer.color = new Color(0.7773361f, 0f, 1f, 1f);
+        Debug.Log("YOU WON");
     }
 }

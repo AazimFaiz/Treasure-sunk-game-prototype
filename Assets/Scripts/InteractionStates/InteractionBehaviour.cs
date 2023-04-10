@@ -20,12 +20,14 @@ public class InteractionBehaviour : MonoBehaviour
     public GameObject player;
 
     InteractionInterface Behaviour;
+    Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
         PlayerController = player.GetComponent<PlayerStateController>();
         Behaviour = GetComponent<InteractionInterface>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame

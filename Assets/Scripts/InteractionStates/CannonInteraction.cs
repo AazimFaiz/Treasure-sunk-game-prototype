@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class CannonInteraction : InteractionInterface
 {
-    bool canInteract = true;
+    bool canInteract = false;
     bool canShoot = false;
     int loadedCannonballs = 0;
+    float currentRotation = 0;
 
     public float maxRotation;
     public float minRotation;
@@ -22,6 +23,8 @@ public class CannonInteraction : InteractionInterface
     void Start()
     {
         Interaction = GetComponent<InteractionBehaviour>();
+        if (flipped)
+            currentRotation = 180;
     }
 
     override public void OnEnter()
@@ -51,7 +54,11 @@ public class CannonInteraction : InteractionInterface
             }
         }
         else
+        {
             StartCoroutine(ShootDelay(0.2f));
+            canInteract = true;
+        }
+            
 
     }
 
@@ -65,15 +72,15 @@ public class CannonInteraction : InteractionInterface
             
 
             float deltaRotation = Time.deltaTime * rotationSpeed * -Interaction.PlayerController.horizontalInput;
-            float newRotationZ = transform.rotation.eulerAngles.z + deltaRotation;
+            currentRotation += deltaRotation;
 
-            if (newRotationZ > 180f && !flipped)
-                newRotationZ -= 360f;
+            if (currentRotation > 180f && !flipped)
+                currentRotation -= 360f;
 
-            newRotationZ = Mathf.Clamp(newRotationZ, minRotation, maxRotation);
+            currentRotation = Mathf.Clamp(currentRotation, minRotation, maxRotation);
 
             // Apply the new rotation to the game object
-            transform.rotation = Quaternion.Euler(0, 0, newRotationZ);
+            transform.rotation = Quaternion.Euler(0, 0, base.Ship.transform.rotation.eulerAngles.z + currentRotation);
 
             if(Interaction.PlayerController.wantToInteract && canShoot && loadedCannonballs > 0)
             {

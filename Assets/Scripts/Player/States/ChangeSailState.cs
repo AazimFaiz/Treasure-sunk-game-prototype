@@ -22,7 +22,7 @@ public class ChangeSailState : PlayerBaseState
         /*ChangeSail= changeSail;
         changeSailInteractable = changeSail.GetComponent<Interactable>();*/
 
-        shipController = sc.ship.GetComponent<ShipController>();
+        //shipController = sc.ship.GetComponent<ShipController>();
     }
 
     public override void OnEnter()
