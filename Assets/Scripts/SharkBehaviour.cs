@@ -11,9 +11,11 @@ public class SharkBehaviour : MonoBehaviour
     AIDestinationSetter destinationSetter;
     Rigidbody2D rb;
 
+    public int sharkHealth;
     public float targettingRadius;
     public float attackForce;
     public float waitDelay;
+    public float regainComposureDelay;
     public float afterAttackDelay;
     public GameObject Ship;
     public GameObject TargetPrefab;
@@ -49,11 +51,11 @@ public class SharkBehaviour : MonoBehaviour
         if (isTargetting && aiPath.remainingDistance > 1 && !reachedShip)
         {
             reachedShip = true;
-            StartCoroutine(WaitAndAttack(waitDelay, afterAttackDelay));
+            StartCoroutine(WaitAndAttack(waitDelay, regainComposureDelay, afterAttackDelay));
         }
     }
 
-    IEnumerator WaitAndAttack(float waitTime, float attackDelayTime)
+    IEnumerator WaitAndAttack(float waitTime, float regainComposureTime,  float attackDelayTime)
     {
         yield return new WaitForSeconds(waitTime);
 
@@ -64,7 +66,7 @@ public class SharkBehaviour : MonoBehaviour
         rb.isKinematic = false;
         rb.AddForce(attackDirection * attackForce, ForceMode2D.Impulse);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(regainComposureTime);
         rb.isKinematic = true;
         aiPath.enabled = true;
         destinationSetter.enabled = true;
@@ -73,5 +75,18 @@ public class SharkBehaviour : MonoBehaviour
         GameObject Target = Ship.GetComponent<ShipController>().SpawnAndGetTarget(TargetPrefab);
         destinationSetter.target = Target.transform;
         reachedShip = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name == "CannonballShoot(Clone)")
+        {
+            
+            Destroy(collision.gameObject);
+            sharkHealth--;
+
+            if(sharkHealth == 0)
+                Destroy(transform.gameObject);
+        }       
     }
 }

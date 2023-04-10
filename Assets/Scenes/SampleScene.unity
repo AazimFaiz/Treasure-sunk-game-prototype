@@ -261,7 +261,7 @@ MonoBehaviour:
   interactPosition: {x: 0, y: 0.9, z: 0}
   interactRotation: {x: 0, y: 0, z: 0}
   interactRadius: 1.2
-  interactDelay: 0.2
+  interactDelay: 0.21
   isInteracting: 0
   Leave: 0
   PlayerController: {fileID: 0}
@@ -586,7 +586,7 @@ MonoBehaviour:
   - 1
   - 3
   - 5
-  shipSpeedPointer: 1
+  shipSpeedPointer: 0
   collisionPushbackForce: 10
   decayRate: 0.9
   shipMaxHealth: 50
@@ -3641,7 +3641,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2142122563}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.8387, y: -6.5943, z: 0}
+  m_LocalPosition: {x: -10.46, y: -6.53, z: 0}
   m_LocalScale: {x: 1.691143, y: 1.691143, z: 1.691143}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3712,10 +3712,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84949677fcce0b4aa4eb72db77f7bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targettingRadius: 10
-  attackForce: 3
-  waitDelay: 1
-  afterAttackDelay: 10
+  sharkHealth: 2
+  targettingRadius: 21
+  attackForce: 7
+  waitDelay: 8
+  regainComposureDelay: 0.8
+  afterAttackDelay: 4
   Ship: {fileID: 158363633}
   TargetPrefab: {fileID: 5339245165013399955, guid: cf3d8231571f2734db8511de054af6ad, type: 3}
 --- !u!114 &2142122567
@@ -3753,7 +3755,7 @@ MonoBehaviour:
   targetCompatibility: {fileID: 0}
   maxAcceleration: 6
   rotationSpeed: 360
-  slowdownDistance: 0.01
+  slowdownDistance: 2
   pickNextWaypointDist: 2
   endReachedDistance: 0.2
   alwaysDrawGizmos: 1
