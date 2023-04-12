@@ -7,6 +7,7 @@ public class FishingRodInteraction : InteractionInterface
     bool isFishing = false;
     bool canFish = true;
     bool hasFish = false;
+    bool hasTreasure = false;
     bool canInteract = true;
     bool canStartInteract = false;
 
@@ -23,6 +24,7 @@ public class FishingRodInteraction : InteractionInterface
 
     public GameObject FishPrefab;
     public GameObject Player;
+    public GameObject LogicManager;
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +56,7 @@ public class FishingRodInteraction : InteractionInterface
                 holdBehaviour.DropHoldable(false);
             }
         }
-        else if(hasFish)
+        else if(hasFish || hasTreasure)
         {
             Interaction.Leave = true;
         }
@@ -83,7 +85,7 @@ public class FishingRodInteraction : InteractionInterface
                 if (isFishing)
                 {
                     SpriteRenderer.color = new Color(1f, 0.7737637f, 0f, 1f);
-                    if(Random.Range(0.0f, 1.0f) < treasureChance)
+                    if(Random.Range(0.0f, 1.0f) < treasureChance && Ship.GetComponent<ShipController>().inTreasureBoundary)
                         Fishing = StartCoroutine(GetTreasureAfterDelay(Random.Range(fishingTimeMin, fishingTimeMax)));
                     else
                         Fishing = StartCoroutine(GetFishAfterDelay(Random.Range(fishingTimeMin, fishingTimeMax)));
@@ -121,6 +123,10 @@ public class FishingRodInteraction : InteractionInterface
             hasFish = false;
             StartCoroutine(InteractDelay(0.2f));
         }
+        else if (hasTreasure)
+        {
+            LogicManager.GetComponent<LogicManager>().EndGameWin();
+        }
     }
 
     IEnumerator StartInteractDelay(float delay)
@@ -156,7 +162,7 @@ public class FishingRodInteraction : InteractionInterface
     {
         yield return new WaitForSeconds(delay);
         Fishing = null;
+        hasFish = true;
         SpriteRenderer.color = new Color(0.7773361f, 0f, 1f, 1f);
-        Debug.Log("YOU WON");
     }
 }

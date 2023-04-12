@@ -1320,7 +1320,7 @@ MonoBehaviour:
   - 3
   - 5
   shipSpeedPointer: 1
-  collisionPushbackForce: 10
+  collisionPushbackForce: 6
   decayRate: 0.9
   shipMaxHealth: 50
   shipRegain: 0.02
@@ -12356,6 +12356,14 @@ PrefabInstance:
     - target: {fileID: 2398985048790295925, guid: 13a77b361d45d6e468379a1e42db1f72, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2398985048790295926, guid: 13a77b361d45d6e468379a1e42db1f72, type: 3}
+      propertyPath: maxSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2398985048790295926, guid: 13a77b361d45d6e468379a1e42db1f72, type: 3}
+      propertyPath: maxAcceleration
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2398985048790295927, guid: 13a77b361d45d6e468379a1e42db1f72, type: 3}
       propertyPath: Ship

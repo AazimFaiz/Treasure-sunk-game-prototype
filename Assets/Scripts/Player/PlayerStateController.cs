@@ -43,6 +43,7 @@ public class PlayerStateController : MonoBehaviour
 
     public GameObject Ship;
     public GameObject HungerBar;
+    public GameObject LogicManager;
 
     Rigidbody2D rb;
 
@@ -73,11 +74,13 @@ public class PlayerStateController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!isInteracting)
+        if (!isInteracting && !hasWon)
         {
             Vector2 direction = new Vector2(horizontalInput, verticalInput).normalized;
-            direction = Ship.transform.TransformDirection(direction);
-            rb.velocity = Ship.GetComponent<ShipController>().rb.velocity + moveSpeed * direction;
+            //direction = Ship.transform.TransformDirection(direction);
+            rb.velocity = 
+                Ship.GetComponent<ShipController>().rb.velocity + 
+                moveSpeed * direction;
 
             Vector2 mousePos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
             transform.up = (Vector3)(mousePos - new Vector2(transform.position.x, transform.position.y));
@@ -105,6 +108,9 @@ public class PlayerStateController : MonoBehaviour
 
         if (hunger > 0)
             hungerCoroutine = StartCoroutine(IncreaseHunger());
+        else
+            LogicManager.GetComponent<LogicManager>().EndGameLoss();
+
     }
 }
 

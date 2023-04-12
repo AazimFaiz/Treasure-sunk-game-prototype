@@ -22,6 +22,7 @@ public class ShipController : MonoBehaviour
     public GameObject Player;
     public GameObject HealthBar;
     public GameObject SharkTarget;
+    public GameObject LogicManager;
     public List<Vector3> holeSpawns;
     List<Vector3> availableHoleSpawns;
     List<GameObject> currentHoles = new();
@@ -42,13 +43,6 @@ public class ShipController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //rb.MovePosition((Vector2)transform.position + shipSpeed * Time.deltaTime * (Vector2)transform.right);
-
-        /*if(val % 60 == 0)
-        {
-            Instantiate(pivot, 5 * Vector3.left, pivot.transform.rotation, transform);
-        }*/
-
         if(!isPushedBack)
             rb.velocity = shipSpeedList[shipSpeedPointer] * (Vector2)transform.right;
 
@@ -61,6 +55,9 @@ public class ShipController : MonoBehaviour
         {
             shipHealth -= healthDrain;
             HealthBar.GetComponent<SliderBar>().setHealth(shipHealth);
+
+            if (shipHealth < 1)
+                LogicManager.GetComponent<LogicManager>().EndGameLoss();
         }
 
         foreach(GameObject hole in currentHoles.ToList())
@@ -79,32 +76,43 @@ public class ShipController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        isPushedBack = true;
-        //Vector3 forceDirection = collision.relativeVelocity.normalized;
-        Vector3 forceDirection = (transform.position - collision.transform.position).normalized;
-        float randVal = Random.Range(0.0f, 1.0f);
-        Debug.Log("Random: " + randVal + " " + currentHoleCount + " " + holeSpawns.Count);
+        string cName = collision.gameObject.name;
+        bool collisionCheck = cName == "Shark" || cName == "Rock" || cName == "Statue";
+        Debug.Log(cName);
 
-        if (randVal < holeSpawnChance && currentHoleCount <= holeSpawns.Count)
+        if (collisionCheck)
         {
-            currentHoleCount++;
+            isPushedBack = true;
 
-            int pickedHole = Random.Range(0, availableHoleSpawns.Count - 1);
-            Vector3 spawnLocation = availableHoleSpawns[pickedHole];
-            availableHoleSpawns.RemoveAt(pickedHole);
+            //Vector3 forceDirection = collision.relativeVelocity.normalized;
+            Vector3 forceDirection = (transform.position - collision.transform.position).normalized;
+            float randVal = Random.Range(0.0f, 1.0f);
+            Debug.Log("Random: " + randVal + " " + currentHoleCount + " " + holeSpawns.Count);
 
-            GameObject newHole = Instantiate(Hole, spawnLocation, Hole.transform.rotation, transform);
-            newHole.transform.localPosition = spawnLocation;
-            newHole.GetComponent<HoleBehaviour>().Player = Player;
-            currentHoles.Add(newHole);
+            if (randVal < holeSpawnChance && currentHoleCount <= holeSpawns.Count)
+            {
+                currentHoleCount++;
+
+                int pickedHole = Random.Range(0, availableHoleSpawns.Count - 1);
+                Vector3 spawnLocation = availableHoleSpawns[pickedHole];
+                availableHoleSpawns.RemoveAt(pickedHole);
+
+                GameObject newHole = Instantiate(Hole, spawnLocation, Hole.transform.rotation, transform);
+                newHole.transform.localPosition = spawnLocation;
+                newHole.GetComponent<HoleBehaviour>().Player = Player;
+                currentHoles.Add(newHole);
+            }
+
+            shipHealth -= collisionDamage;
+            HealthBar.GetComponent<SliderBar>().setHealth(shipHealth);
+
+            if (shipHealth < 1)
+                LogicManager.GetComponent<LogicManager>().EndGameLoss();
+
+            // Apply the force to the rigidbody
+            rb.AddForce(forceDirection * collisionPushbackForce, ForceMode2D.Impulse);
+            StartCoroutine(ReturnToSteadySpeed());
         }
-
-        shipHealth -= collisionDamage;
-        HealthBar.GetComponent<SliderBar>().setHealth(shipHealth);
-
-        // Apply the force to the rigidbody
-        rb.AddForce(forceDirection * collisionPushbackForce, ForceMode2D.Impulse);
-        StartCoroutine(ReturnToSteadySpeed());
     }
 
     private IEnumerator ReturnToSteadySpeed()
@@ -140,16 +148,6 @@ public class ShipController : MonoBehaviour
         // Choose a random edge
         int randomEdge = Random.Range(0, 1);
         int otherEdge = randomEdge == 0 ? 3 : 2;
-
-        /*switch (randomEdge)
-        {
-            case 0:
-                otherEdge = 3;
-                break;
-            case 1:
-                otherEdge = 2;
-                break;
-        }*/
 
         // Get a random point on the chosen edge
         Vector2 randomPointOnEdge = Vector2.Lerp(edgePoints[randomEdge], edgePoints[otherEdge], Random.Range(0f, 1f));

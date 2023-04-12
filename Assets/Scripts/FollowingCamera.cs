@@ -30,9 +30,9 @@ public class FollowingCamera : MonoBehaviour
             targetPosition = new Vector3(target.transform.position.x, target.transform.position.y, targetZ);
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref posVelocity, moveSmoothTime);
 
-            float newRotZ = Mathf.SmoothDampAngle(transform.rotation.eulerAngles.z,
-                target.transform.rotation.eulerAngles.z, ref rotVelocity, rotSmoothTime);
-            transform.rotation = Quaternion.Euler(0, 0, newRotZ);
+            /*float newRotZ = Mathf.SmoothDampAngle(transform.rotation.eulerAngles.z,
+                target.transform.rotation.eulerAngles.z, ref rotVelocity, rotSmoothTime);*/
+            //transform.rotation = Quaternion.Euler(0, 0, newRotZ);
         }
         //}
     }
